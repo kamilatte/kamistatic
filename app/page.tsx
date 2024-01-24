@@ -22,6 +22,7 @@ const NotFoundPage: React.FC = () => {
               h1 {
                 font-size: 3em;
                 margin-bottom: 10px;
+                color: white;
               }
 
               p {
