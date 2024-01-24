@@ -10,12 +10,17 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   const server = express();
 
-  // Serve files from the ./src directory
-  server.use('/src', express.static(__dirname + '/src'));
+  // Serve public/index.html for all routes except /src/*
+  server.get(/^\/(?!src).*/, (req, res) => {
+    const parsedUrl = parse(req.url, true);
+    const { pathname } = parsedUrl;
 
-  server.all('*', (req, res) => {
-    return handle(req, res);
+    // Serve public/index.html for non-/src routes
+    return app.serveStatic(req, res, 'public/index.html');
   });
+
+  // Serve static files from the /src route
+  server.use('/src', express.static('public/src'));
 
   const httpServer = createServer(server);
 
